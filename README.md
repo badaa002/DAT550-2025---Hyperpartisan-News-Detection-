@@ -25,27 +25,27 @@ The dataset includes:
 
 ---
 
-### 📈 Processed / Output Data
+### 📁 External Evaluation Dataset
 
-The original authors have processed and aggregated data into the following files:
-- `output/fb-page-info-summary.csv` — Overview of page IDs and partisanship
-- `output/page-engagement-by-week.csv` — Weekly engagement metrics per page
-- `output/top-100-posts-total-engagement-by-week-and-partisanship.csv` — Weekly top 100 posts per side
-- `output/page-engagement-growth.csv` — Growth in engagement from Mar 2016–Mar 2017
-- `output/whois-registration-counts-annual.csv` — Annual domain registrations by partisanship
+The project also uses a clean, manually labeled dataset for training and evaluation:
 
----
+- `articles-training-byarticle-20181122.xml` — Full-text news articles with `<title>`, `<p>` (paragraphs), and metadata
+- `ground-truth-training-byarticle-20181122.xml` — Article-level binary labels (`hyperpartisan: true/false`), matched by article ID
 
-## 🎯 Task Description
+> ✅ This dataset comes from the [SemEval-2019 Task 4](https://doi.org/10.5281/zenodo.1489920) and includes **1,273 articles** manually annotated for hyperpartisanship.  
+> 📌 Used for model training, validation, and benchmarking on high-quality labels.
+
+## 🎯 Task Description (editing ....) 
 
 - **Task Type:** Supervised classification
-- **Goal:** Classify whether a news article or Facebook post is hyperpartisan or not
-- **Input:** Text data from news articles or Facebook posts
+- **Goal:** ....
+- **Input:** 
 - **Output:** Binary label — `Hyperpartisan` or `Not Hyperpartisan`
 - **Challenges:**
   - Long-form text processing
   - Imbalanced class distributions
   - Bias in sources and annotation
+  - To be filled....
 
 ---
 
