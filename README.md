@@ -2,74 +2,72 @@
 
 ## 📌 Project Overview
 
-This project explores the task of detecting **hyperpartisan news articles** — content that exhibits extreme political bias — using machine learning techniques. It is part of a course assignment and contributes 25% to the final grade.
+This project explores the task of detecting **hyperpartisan news articles** — content that exhibits extreme political bias — using machine learning. The project is part of a university course and contributes 25% to the final grade.
 
-We aim to compare baseline and advanced models (including deep learning), evaluate performance, and identify patterns in partisan media.
-
----
-
-## 📂 Dataset
-
-### 🔗 Source
-- **BuzzFeed News & Webis Hyperpartisan Dataset**  
-  [GitHub Repository](https://github.com/BuzzFeedNews/2017-08-partisan-sites-and-facebook-pages)  
-  [Kiesel et al. (2019) - Paper PDF](https://downloads.webis.de/publications/papers/kiesel_2019c.pdf)
-
-### 📁 Raw Data
-The dataset includes:
-- `data/all-partisan-sites.csv` — 667 websites identified as partisan (left or right), with info about Facebook pages and origins (e.g. Macedonia)
-- `data/pages-info.csv` — Metadata on 452 Facebook pages (title, description, fan count, etc.)
-- `data/domaintools-whois-results.csv` — WHOIS registration data for each domain
-
-> ⚠️ Full Facebook post data (2015–2017) is too large for the repository but downloadable via the original repo.
+We aim to:
+- Compare baseline and advanced models (including deep learning)
+- Evaluate model performance using both clean and noisy labels
+- Analyze and reflect on the quality of labeling and feature importance
 
 ---
 
-### 📁 External Evaluation Dataset
+## 📂 Datasets
 
-The project also uses a clean, manually labeled dataset for training and evaluation:
+### 🔗 Main Source
 
-- `articles-training-byarticle-20181122.xml` — Full-text news articles with `<title>`, `<p>` (paragraphs), and metadata
-- `ground-truth-training-byarticle-20181122.xml` — Article-level binary labels (`hyperpartisan: true/false`), matched by article ID
+- **PAN @ SemEval 2019 Task 4: Hyperpartisan News Detection**  
+  [Dataset on Zenodo](https://doi.org/10.5281/zenodo.1489920)  
+  [Task Website](https://webis.de/data/pan-semeval-hyperpartisan-news-detection-19.html)  
+  [Official Paper (Kiesel et al., 2019)](https://downloads.webis.de/publications/papers/kiesel_2019c.pdf)
 
-> ✅ This dataset comes from the [SemEval-2019 Task 4](https://doi.org/10.5281/zenodo.1489920) and includes **1,273 articles** manually annotated for hyperpartisanship.  
-> 📌 Used for model training, validation, and benchmarking on high-quality labels.
+### 📁 Clean Labeled Data (by-article)
 
-## 🎯 Task Description (editing ....) 
+Used for initial training, testing, and evaluation:
 
-- **Task Type:** Supervised classification
-- **Goal:** ....
-- **Input:** 
-- **Output:** Binary label — `Hyperpartisan` or `Not Hyperpartisan`
+- `articles-training-byarticle-20181122.xml` — Article texts with `<title>` and `<p>` tags
+- `ground-truth-training-byarticle-20181122.xml` — Manually labeled `hyperpartisan: true/false`
+
+> ✅ Crowdsourced, article-level labels with high quality (645 samples)
+
+---
+
+### 📁 Noisy Labeled Data (by-publisher)
+
+Used for large-scale experiments and weak-supervision training:
+
+- `articles-training-bypublisher-20181122.xml` — 600,000 articles
+- `ground-truth-training-bypublisher-20181122.xml` — Labels based on site-level political bias
+- *(Optional)* `articles-validation-bypublisher-20181122.xml` — 150,000 validation articles
+- *(Optional)* `ground-truth-validation-bypublisher-20181122.xml` — Labels for validation
+
+> ⚠️ Labels in this set are based on domain-level bias (not on article content) and may be noisy.
+
+---
+
+## 🎯 Task Description
+
+- **Task Type:** Supervised binary classification
+- **Goal:** Predict whether a news article is *hyperpartisan* (`1`) or *not hyperpartisan* (`0`)
+- **Input:** News article text (title + body)
+- **Output:** Binary label
 - **Challenges:**
-  - Long-form text processing
-  - Imbalanced class distributions
-  - Bias in sources and annotation
-  - To be filled....
+  - Imbalanced classes in clean data
+  - Noisy labeling in large dataset
+  - Long-form text
+  - Differentiating strong vs moderate bias
 
 ---
 
 ## 🧠 Approach (Planned)
 
-1. **Data Cleaning & Exploration**
-   - Handle missing values
-   - Normalize text
-   - Visualize with TSNE/PCA
+### 1. **Data Preprocessing**
+- Parse XML articles
+- Clean and normalize text
+- Match articles with correct labels
+- Create structured dataset for modeling
 
-2. **Feature Engineering**
-   - CountVectorizer / TF-IDF
-   - Word embeddings (Word2Vec, BERT)
 
-3. **Modeling**
-   - **Baseline**: Logistic Regression, Naive Bayes, Decision Tree
-   - **Advanced**: BERT (HuggingFace Transformers)
-   - **Optional**: Ensemble techniques
-
-4. **Evaluation**
-   - Accuracy, Precision, Recall, F1, ROC Curve
-   - Significance testing
-
----
+  TODO.....
 
 ## 👥 Team
 
@@ -95,8 +93,8 @@ We plan to:
 
 | Week | Tasks |
 |------|-------|
-| Mar 21–24 | Finalize topic, register team, set up repo |
-| Mar 25–31 | Data exploration, define task, build baseline |
+| Mar 21–23 | Finalize topic, register team, set up repo |
+| Mar 23–31 | Data exploration, define task, build baseline |
 | Apr 1–10  | Deep learning model, embeddings |
 | Apr 11–20 | Evaluation, error analysis, write report |
 | Apr 21–29 | Final tuning, presentation slides |
