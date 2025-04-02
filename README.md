@@ -51,23 +51,40 @@ Used for large-scale experiments and weak-supervision training:
 - **Input:** News article text (title + body)
 - **Output:** Binary label
 - **Challenges:**
-  - Imbalanced classes in clean data
-  - Noisy labeling in large dataset
+  - Imbalanced classes in clean small data (by-article)
+  - Noisy labeling in large dataset (by-publisher)
   - Long-form text
   - Differentiating strong vs moderate bias
+  - Risk of models learning publisher bias instead of true hyperpartisan features.
 
 ---
 
 ## 🧠 Approach (Planned)
 
 ### 1. **Data Preprocessing**
+- Use of two datasets
 - Parse XML articles
 - Clean and normalize text
 - Match articles with correct labels
+- Feature engineering 
 - Create structured dataset for modeling
+  
+### 2. **Models & Experiments**
+Try multiple algorithms:
 
+  -  A baseline (e.g., Naive Bayes, Logistic regression, Random forest, ).
 
-  TODO.....
+  -  An advanced model (e.g., Deep Learning — CNN, LSTM, BERT).
+
+Compare models on:
+
+    Accuracy, Precision, Recall, F1-score, ROC curve.
+
+    Document limitations of each model.
+
+### 3. **Evaluation & Tuning**
+
+  For all models: include clear comparisons, limitations, and ideally a significance test between approaches.
 
 ## 👥 Team
 
@@ -79,22 +96,12 @@ Used for large-scale experiments and weak-supervision training:
 
 ---
 
-## 🧪 Experiments
-
-We plan to:
-- Tune hyperparameters (learning rate, dropout, regularization)
-- Compare traditional ML vs deep learning
-- Test multiple vectorization techniques
-- Document model strengths/weaknesses
-
----
-
 ## 🗓️ Timeline
 
 | Week | Tasks |
 |------|-------|
 | Mar 21–23 | Finalize topic, register team, set up repo |
-| Mar 23–31 | Data exploration, define task, build baseline |
+| Mar 23–10 | Data exploration, define task, build baseline |
 | Apr 1–10  | Deep learning model, embeddings |
 | Apr 11–20 | Evaluation, error analysis, write report |
 | Apr 21–29 | Final tuning, presentation slides |
