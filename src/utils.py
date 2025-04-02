@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc, balanced_accuracy_score
 import matplotlib.pyplot as plt
 
 def load_cleaned_data(file_to_load):
@@ -15,6 +15,9 @@ def metrics(y_test, y_pred, y_pred_proba):
     
     accuracy = accuracy_score(y_test, y_pred)
     print(f"Accuracy: {accuracy:.2f}")
+
+    balanced_acc = balanced_accuracy_score(y_test, y_pred)
+    print(f"Balanced Accuracy: {balanced_acc:.2f}")    
 
     precision = precision_score(y_test, y_pred, average='binary', zero_division=1)
     print(f"Precision: {precision:.2f}")
