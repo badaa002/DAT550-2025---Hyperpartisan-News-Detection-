@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc, balanced_accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc, balanced_accuracy_score, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 
 def load_cleaned_data(file_to_load):
@@ -43,4 +43,13 @@ def metrics(y_test, y_pred, y_pred_proba):
     plt.legend()
     plt.show()
 
-    
+def plot_confusion_matrix(y_true, y_pred, labels=["Not Hyper", "Hyper"]):
+    ConfusionMatrixDisplay.from_predictions(
+        y_true,
+        y_pred,
+        display_labels=labels,
+        cmap='Blues'
+    )
+    plt.title("Confusion Matrix")
+    plt.show()
+
