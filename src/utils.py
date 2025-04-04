@@ -2,7 +2,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc, balanced_accuracy_score, ConfusionMatrixDisplay, roc_auc_score
 import matplotlib.pyplot as plt
-  
+import numpy as np
+import os
+import json
 
 def load_cleaned_data(file_to_load):
     return pd.read_csv(file_to_load, sep='\t')
@@ -44,6 +46,22 @@ def metrics(y_test, y_pred, y_pred_proba):
     plt.legend()
     plt.show()
 
+def compute_metrics(eval_pred):
+    predictions, labels = eval_pred
+    predictions = np.argmax(predictions, axis=1)
+    
+    balanced_acc = balanced_accuracy_score(labels, predictions)
+    precision = precision_score(labels, predictions, average='binary', zero_division=0)
+    recall = recall_score(labels, predictions, average='binary', zero_division=0)
+    f1 = f1_score(labels, predictions, average='binary', zero_division=0)
+    
+    return {
+        'balanced_accuracy': balanced_acc,
+        'precision': precision,
+        'recall': recall,
+        'f1': f1
+    }
+
 def plot_confusion_matrix(y_true, y_pred, labels=["Not Hyper", "Hyper"]):
     ConfusionMatrixDisplay.from_predictions(
         y_true,
@@ -66,3 +84,21 @@ def store_metrics(results_list, model_name, setup_label, y_test, y_pred, y_pred_
         "AUC": round(roc_auc_score(y_test, y_pred_proba),3)
     })
 
+def load_config(config_path="config.json"):
+    """Load configuration from a JSON file"""
+    with open(config_path, 'r') as f:
+        config = json.load(f)
+    return config
+
+
+def get_model_paths(config, fold=None):
+    """Get model paths based on config"""
+    if fold is not None:
+        return os.path.join(config["training"]["output_dir"], f"xlm_roberta_fold_{fold}")
+    else:
+        return os.path.join(config["training"]["output_dir"], "xlm_roberta_final")
+
+
+def get_fold_model_paths(config):
+    """Get paths for all fold models"""
+    return [get_model_paths(config, fold=i+1) for i in range(config["cross_validation"]["n_splits"])]
