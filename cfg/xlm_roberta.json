@@ -8,6 +8,7 @@
     },
     "model": {
         "base_model": "xlm-roberta-base",
+        "alternative_base_model": "xlm-roberta-large",
         "num_labels": 2,
         "classifier_dropout": 0.3
     },
@@ -28,10 +29,13 @@
     "cross_validation": {
         "n_splits": 5,
         "shuffle": true,
-        "random_state": 42
+        "random_state": 0
     },
     "class_balancing": {
         "use_balancing": true,
         "method": "oversample"
+    },
+    "inference": {
+        "threshold": 0.5
     }
 }
