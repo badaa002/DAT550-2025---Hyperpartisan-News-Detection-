@@ -8,23 +8,25 @@
     },
     "model": {
         "base_model": "xlm-roberta-base",
-        "alternative_base_model": "xlm-roberta-large",
+        "alternative_model": "xlm-roberta-large",
         "num_labels": 2,
         "classifier_dropout": 0.3
     },
     "training": {
         "output_dir": "../models",
         "learning_rate": 2e-5,
-        "batch_size": 16,
-        "eval_batch_size": 16,
-        "epochs": 8,
+        "batch_size": 8,
+        "eval_batch_size": 8,
+        "epochs": 10,
         "weight_decay": 0.01,
         "evaluation_strategy": "epoch",
         "save_strategy": "epoch",
         "load_best_model_at_end": true,
         "metric_for_best_model": "f1",
         "save_total_limit": 2,
-        "early_stopping_patience": 3
+        "early_stopping_patience": 4,
+        "use_fp16": true,
+        "device": "auto"
     },
     "cross_validation": {
         "n_splits": 5,
@@ -32,10 +34,25 @@
         "random_state": 0
     },
     "class_balancing": {
-        "use_balancing": true,
+        "use_balancing": false,
         "method": "oversample"
     },
     "inference": {
         "threshold": 0.5
+    },
+    "tokenizer": {
+        "padding": "max_length",
+        "truncation": true,
+        "return_tensors": "pt",
+        "batch_process": true,
+        "remove_columns": [
+            "text"
+        ],
+        "format_type": "torch",
+        "format_columns": [
+            "input_ids",
+            "attention_mask",
+            "label"
+        ]
     }
 }
