@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc, balanced_accuracy_score, ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc, balanced_accuracy_score, ConfusionMatrixDisplay, roc_auc_score
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -71,6 +71,18 @@ def plot_confusion_matrix(y_true, y_pred, labels=["Not Hyper", "Hyper"]):
     )
     plt.title("Confusion Matrix")
     plt.show()
+
+def store_metrics(results_list, model_name, setup_label, y_test, y_pred, y_pred_proba):
+    results_list.append({
+        "Model": model_name,
+        "Setup": setup_label,
+        "Accuracy": round(accuracy_score(y_test, y_pred), 3),
+        "Balanced Accuracy": round(balanced_accuracy_score(y_test, y_pred),3),
+        "Precision": round(precision_score(y_test, y_pred),3),
+        "Recall": round(recall_score(y_test, y_pred),3),
+        "F1 Score": round(f1_score(y_test, y_pred),3),
+        "AUC": round(roc_auc_score(y_test, y_pred_proba),3)
+    })
 
 def load_config(config_path="config.json"):
     """Load configuration from a JSON file"""
