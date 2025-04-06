@@ -1,4 +1,5 @@
 {
+    "seed": 0,
     "data": {
         "data_dir": "../data",
         "preprocessed_data_path": "../data/preprocessed/byarticle_clean.tsv",
