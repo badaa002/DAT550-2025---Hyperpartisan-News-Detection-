@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc, balanced_accuracy_score, ConfusionMatrixDisplay, roc_auc_score
+from imblearn.over_sampling import RandomOverSampler
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -51,9 +52,9 @@ def compute_metrics(eval_pred):
     predictions = np.argmax(predictions, axis=1)
     
     balanced_acc = balanced_accuracy_score(labels, predictions)
-    precision = precision_score(labels, predictions, average='binary', zero_division=0)
-    recall = recall_score(labels, predictions, average='binary', zero_division=0)
-    f1 = f1_score(labels, predictions, average='binary', zero_division=0)
+    precision = precision_score(labels, predictions, zero_division=0)
+    recall = recall_score(labels, predictions, zero_division=0)
+    f1 = f1_score(labels, predictions, zero_division=0)
     
     return {
         'balanced_accuracy': balanced_acc,
@@ -102,3 +103,18 @@ def get_model_paths(config, fold=None):
 def get_fold_model_paths(config):
     """Get paths for all fold models"""
     return [get_model_paths(config, fold=i+1) for i in range(config["cross_validation"]["n_splits"])]
+
+
+def apply_oversampling(X_train, y_train, random_state=42):
+    ros = RandomOverSampler(random_state=random_state)
+    train_indices = np.array(range(len(X_train))).reshape(-1, 1)
+    train_indices_resampled, y_train_resampled = ros.fit_resample(train_indices, y_train.values)
+    train_indices_resampled = train_indices_resampled.flatten()
+    
+    X_train_resampled = X_train.iloc[train_indices_resampled].reset_index(drop=True)
+    y_train_resampled = pd.Series(y_train_resampled)
+    
+    print(f"Original training data distribution: {y_train.value_counts().to_dict()}")
+    print(f"Resampled training data distribution: {y_train_resampled.value_counts().to_dict()}")
+    
+    return X_train_resampled, y_train_resampled
