@@ -11,7 +11,7 @@
         "base_model": "xlm-roberta-base",
         "alternative_model": "xlm-roberta-large",
         "num_labels": 2,
-        "classifier_dropout": 0.2
+        "classifier_dropout": 0.3
     },
     "training": {
         "output_dir": "../models",
@@ -30,7 +30,7 @@
         "device": "auto"
     },
     "cross_validation": {
-        "n_splits": 5,
+        "n_splits": 10,
         "shuffle": true,
         "random_state": 0
     },
@@ -47,7 +47,7 @@
         "add_special_tokens": true,
         "return_tensors": "pt",
         "batch_process": true,
-        "stride": 256,
+        "stride": 128,
         "return_overflowing_tokens": true,
         "remove_columns": [
             "text"
