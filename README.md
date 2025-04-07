@@ -4,7 +4,7 @@
 
 This project explores the task of detecting **hyperpartisan news articles** — content that exhibits extreme political bias — using machine learning. The project is part of a university course and contributes 25% to the final grade.
 
-We aim to:
+We aim to [NEEDS UPDATE]:
 - Compare baseline and advanced models (including deep learning)
 - Evaluate model performance using both clean and noisy labels
 - Analyze and reflect on the quality of labeling and feature importance
@@ -24,10 +24,23 @@ We aim to:
 
 Used for initial training, testing, and evaluation:
 
-- `articles-training-byarticle-20181122.xml` — Article texts with `<title>` and `<p>` tags
+- `articles-training-byarticle-20181122.xml` — Article texts with `<title>` and `<p>` tags. 
 - `ground-truth-training-byarticle-20181122.xml` — Manually labeled `hyperpartisan: true/false`
+- `articles-test-byarticle-20181207.xml` — Test article texts
+- `ground-truth-test-byarticle-20181207.xml` — Balanced test labels for testing/evaluation
 
-> ✅ Crowdsourced, article-level labels with high quality (645 samples)
+Training set: 645 articles
+
+   - 238 (37%) hyperpartisan
+
+   - 407 (63%) not hyperpartisan
+
+Test set: 628 articles
+
+   - Balanced: 50% hyperpartisan / 50% not
+
+> ⚠️ Train/test split is publisher-disjoint — none of the training publishers appear in the test set.  
+✅ Crowdsourced, article-level labels with high agreement.
 
 ---
 
@@ -72,13 +85,13 @@ Used for large-scale experiments and weak-supervision training:
 ### 2. **Models & Experiments**
 Try multiple algorithms:
 
-  -  A baseline (e.g., Naive Bayes, Logistic regression, Random forest, ).
+  -  A baseline (e.g., Naive Bayes, Logistic regression, Random forest, XGBoost).
 
   -  An advanced model (e.g., Deep Learning — CNN, LSTM, BERT).
 
 Compare models on:
 
-    Accuracy, Precision, Recall, F1-score, ROC curve.
+    Accuracy (Balanced accuracy), Precision, Recall, F1-score, ROC curve.
 
     Document limitations of each model.
 
@@ -101,8 +114,8 @@ Compare models on:
 | Week | Tasks |
 |------|-------|
 | Mar 21–23 | Finalize topic, register team, set up repo |
-| Mar 23–10 | Data exploration, define task, build baseline |
-| Apr 1–10  | Deep learning model, embeddings |
+| Mar 23– Apr 10 | Data exploration, define task, build baseline, build deep learning model, embeddings |
+| Apr 1–10  | Finish rapport for part 1, define part 2, touch ups |
 | Apr 11–20 | Evaluation, error analysis, write report |
 | Apr 21–29 | Final tuning, presentation slides |
 | Apr 30    | Final submission 🎉 |
