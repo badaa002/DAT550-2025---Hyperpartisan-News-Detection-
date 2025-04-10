@@ -1,0 +1,4 @@
+Model,Setup,Threshold,F1,Recall,Precision,AUC,CV AUC,Best Params
+Logistic Regression,TF-IDF + Style + class_weight,0.45,0.768,0.828,0.716,0.843,0.814,"{'C': 2, 'penalty': 'l2', 'solver': 'liblinear'}"
+Random Forest,TF-IDF(2000) + Style + ROS,0.4,0.784,0.828,0.745,0.845,0.947,"{'max_depth': None, 'max_features': 'log2', 'min_samples_leaf': 1, 'n_estimators': 300}"
+XGBoost,TF-IDF(2000) + Style + SPW,0.4,0.77,0.78,0.761,0.836,0.946,"{'max_depth': 8, 'learning_rate': 0.05, 'n_estimators': 200, 'subsample': 0.8, 'colsample_bytree': 1, 'min_child_weight': 1, 'scale_pos_weight': 1.71}"
