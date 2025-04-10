@@ -1,0 +1,5 @@
+Model,Setup,Accuracy,Balanced Accuracy,Precision,Recall,F1 Score,AUC
+Naive Bayes,TF-IDF + Style + ROS + lemmatization,0.68,0.68,0.624,0.904,0.739,0.815
+Logistic Regression,TF-IDF + Style + class_weight,0.76,0.76,0.764,0.752,0.758,0.84
+Random Forest,TF-IDF(2000) + ROS + Style,0.768,0.768,0.816,0.691,0.748,0.844
+XGBoost,TF-IDF(2000) + Style + ROS,0.758,0.758,0.821,0.659,0.731,0.834
