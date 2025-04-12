@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import json
+from collections import defaultdict
 
 def load_cleaned_data(file_to_load):
     return pd.read_csv(file_to_load, sep='\t')
@@ -118,3 +119,41 @@ def apply_oversampling(X_train, y_train, random_state=42):
     print(f"Resampled training data distribution: {y_train_resampled.value_counts().to_dict()}")
     
     return X_train_resampled, y_train_resampled
+
+
+def aggregate_publishers_by_domain(df):
+    """
+    Aggregate publishers based on domain, filtering out domains with mixed labels.
+    
+    Args:
+        df: DataFrame with columns 'domain' and 'label'
+        
+    Returns:
+        DataFrame with consistent publishers and their labels
+    """
+    # Group by domain and check label consistency
+    domain_stats = defaultdict(lambda: {'count': 0, 'labels': set()})
+    
+    # First pass: collect label information for each domain
+    for _, row in df.iterrows():
+        domain = row['domain']
+        label = row['label']
+        domain_stats[domain]['count'] += 1
+        domain_stats[domain]['labels'].add(label)
+    
+    # Filter consistent domains (domains with only one type of label)
+    consistent_domains = []
+    for domain, stats in domain_stats.items():
+        if len(stats['labels']) == 1:  # Only one unique label
+            label = list(stats['labels'])[0]  # Get the single label
+            consistent_domains.append({
+                'domain': domain,
+                'label': label,
+                'article_count': stats['count']
+            })
+    
+    # Create dataframe of consistent publishers
+    consistent_df = pd.DataFrame(consistent_domains)
+    
+    # Sort by article count for better visibility
+    return consistent_df.sort_values(by='article_count', ascending=False)
