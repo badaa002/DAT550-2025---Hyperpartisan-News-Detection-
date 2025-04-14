@@ -61,7 +61,8 @@ def compute_metrics(eval_pred):
         'balanced_accuracy': balanced_acc,
         'precision': precision,
         'recall': recall,
-        'f1': f1
+        'f1': f1,
+        'auc': roc_auc_score(labels, predictions),
     }
 
 def plot_confusion_matrix(y_true, y_pred, labels=["Not Hyper", "Hyper"]):
