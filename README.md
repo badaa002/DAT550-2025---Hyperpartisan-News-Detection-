@@ -112,6 +112,43 @@ Tested combinations of:
 
 ---
 
+## 🔄 Phase 2: Relabeling the Noisy Dataset (By-Publisher)
+
+After establishing strong models using the clean **by-article** dataset, we extended our project to include the larger, noisily-labeled **by-publisher** dataset.
+
+### ⚙️ Procedure
+
+We used both our best baseline and transformer models to relabel the noisy dataset:
+
+- **Random Forest** (best classical model)
+- **XLM-RoBERTa** (fine-tuned transformer)
+
+Steps:
+- Generated predictions (`.npy`) and probabilities for each article in the by-publisher set
+- Compared predictions to:
+  - The original PAN labels
+  - Each other (model agreement/disagreement)
+- Focused on **confidence-based filtering** to identify possibly mislabeled examples
+
+### 🧐 Observations
+
+- **XLM-RoBERTa** predicted a higher number of hyperpartisan articles than Random Forest
+- Many **low-confidence PAN labels** were contradicted by both models
+- High agreement between the two models on *non-hyperpartisan* articles
+- Divergent predictions often showed signs of **ambiguous or borderline language**
+- Clear cases of publisher bias in PAN labels were revealed when articles lacked strong partisan cues
+
+### 🔬 Analytical Goals
+
+- Assess **label quality** in the PAN by-publisher dataset using model predictions
+- Explore **model disagreement** to highlight weak spots in distant supervision
+- Identify **potentially cleaner subsets** of the noisy data for future training
+- Reflect on whether models learned **true hyperpartisan cues** or just publisher style
+
+> ✅ Both classical and deep models help expose limitations of the noisy dataset  
+> 🔁 Could be extended into semi-supervised or active learning strategies
+
+
 ## 🧪 Results Summary (Example)
 
 | Model                | Setup                     | F1   | AUC  |
