@@ -164,9 +164,9 @@ Steps:
 
 ## 👥 Team
 
-- **Member 1**: [Name] - preprocessing, baselines + evoluation/tuning, baseline model label-prediction, report writing
-- **Member 2**: [Name] - baselines + evaluation, report writing, presentation
-- **Member 3**: [Name] - advanced model + evoluation/tuning, advanced model label-prediction, report writing
+- **Member 1**: [Darya] - preprocessing, baselines + evoluation/tuning, baseline model label-prediction, report writing
+- **Member 2**: [Mikah] - baselines + evaluation, report writing, presentation
+- **Member 3**: [Kjell] - advanced model + evoluation/tuning, advanced model label-prediction, report writing
 
 > Contributions were distributed equally across project phases.
 
