@@ -1,7 +1,47 @@
 # 📰 Hyperpartisan News Detection
 
-> 🗂️ All modeling, evaluation, and analysis steps are provided as easy-to-run Jupyter notebooks.
+## 🗂️ Project Structure
+```
+.
+├── README.md
+├── baseline_model/
+├── cfg/
+├── data
+│   ├── byarticle/
+│   ├── bypublisher/
+│   └── preprocessed/
+├── docs/
+├── notebooks/
+│   ├── Preprocessing_byarticle.ipynb
+│   ├── ...
+│   └── splitt_baselines/
+├── results
+│   ├── Final_Baseline_Models_Summary.csv
+│   ├── ...
+│   ├── plots/
+│   ├── plots_incl_xml/
+│   ├── predictions/
+│   └── rf_final_tuning/
+├── src/
+│   ├── utils.py
+│   ├── classifier.py
+│   └── weighted_ensemble_predict.py
+└── requirements.txt
+```
 
+The project is organized around Jupyter Notebooks, supported by reusable scripts for evaluation and prediction.
+
+- **notebooks/** contains all main model development and evaluation workflows.
+- **src/** includes helper functions like metrics calculation, model saving/loading, and ensemble prediction.
+- **baseline_model/** stores the trained Random Forest model and its vectorizer/scaler.
+- **cfg/** contains hyperparameter configuration files for XLM-RoBERTa training and inference.
+- **results/** holds saved metrics, prediction files, plots, and tuning results.
+- **data/** includes preprocessed dataset samples. Full original datasets are linked separately due to size constraints.
+- **docs/** contains external documents related to the SemEval task.
+
+>📜  All notebooks are self-contained and import required utilities automatically.  
+
+---
 
 ## 📌 Project Overview
 
