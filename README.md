@@ -1,5 +1,8 @@
 # 📰 Hyperpartisan News Detection
 
+> 🗂️ All modeling, evaluation, and analysis steps are provided as easy-to-run Jupyter notebooks.
+
+
 ## 📌 Project Overview
 
 This project explores ***hyperpartisan news detection*** — identifying news articles exhibiting extreme political bias — using machine learning. It was conducted as part of a university course and contributes 40% to the final grade.
@@ -22,7 +25,7 @@ To explore or rerun our work:
 
 ```bash
 git clone <repo_url>
-
+```
 
 ---
 ## 📂 Datasets
