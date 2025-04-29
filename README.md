@@ -2,17 +2,29 @@
 
 ## 📌 Project Overview
 
-This project explores the task of detecting **hyperpartisan news articles** — content that exhibits extreme political bias — using machine learning. The project is part of a university course and contributes 25% to the final grade.
+This project explores ***hyperpartisan news detection*** — identifying news articles exhibiting extreme political bias — using machine learning. It was conducted as part of a university course and contributes 40% to the final grade.
 
 We aim to:
-- Compare baseline (Naive Bayes, Logistic Regression, Random Forest, XGBoost) and advanced models (including XLM-RoBERTa)
-- Evaluate model performance using both clean (by-article) and noisy (by-publisher) labels
-- Analyze feature importance, model confidence, and sentiment in predictions
-- Conduct critical reflections on dataset quality and limitations
-- Visualize and document key findings, including error analysis
+- Compare baseline (Naive Bayes, Logistic Regression, Random Forest, XGBoost) and advanced (XLM-RoBERTa) models.
+- Evaluate models using clean (by-article) and noisy (by-publisher) labels from the SemEval-2019 Task 4 datasets.
+- Analyze model confidence, sentiment, and publisher-level inconsistencies.
+- Critically reflect on dataset limitations, distant supervision, and label quality.
+- Visualize findings through ROC curves, confusion matrices, and feature importance plots.
 
 ---
+## 🔁 Reproducibility
 
+To explore or rerun our work:
+
+1. Make sure you have **Python** installed (≥3.8 recommended)
+2. Make sure you have **Jupyter Notebook** or **JupyterLab** installed
+3. Clone the GitHub repository:
+
+```bash
+git clone <repo_url>
+
+
+---
 ## 📂 Datasets
 
 ### 🔗 Main Source
@@ -41,7 +53,8 @@ Test set: 628 articles (balanced)
 - 314 (50%) hyperpartisan  
 - 314 (50%) not hyperpartisan
 
-> ✅ High-quality, crowdsourced article-level annotations  
+>✅ Balanced test set
+>✅ Used for main model development
 > ⚠️ Train/test sets are publisher-disjoint to prevent publisher bias leakage
 
 ---
@@ -54,8 +67,13 @@ Used for pretraining and experimental setups:
 - `ground-truth-training-bypublisher-20181122.xml`
 - *(Optional)* Validation: 150k articles with labels
 
+- Publisher-level weak supervision (inferred bias).
+- Large-scale data (~750,000 articles).
+- 
 > ⚠️ Labels inferred from domain-level bias, so may be noisy  
-> ⚠️ Risk of models learning publisher style over true bias content
+> ⚠️ Models risk learning publisher style instead of true bias.
+
+
 
 ---
 
@@ -66,139 +84,105 @@ Used for pretraining and experimental setups:
 - **Input:** News article (title + body)  
 - **Output:** Binary prediction  
 - **Challenges:**
-  - Label quality differences across datasets
-  - Data imbalance in smaller, clean set
-  - Long-text modeling and subjective definitions of partisanship
-  - Avoiding publisher-based leakage in training
+  - Label noise (especially by-publisher)
+  - Imbalanced classes in training data
+  - Long-text modeling (truncation/sliding window issues)
+  - Preventing publisher-based leakage
 
 ---
 
 ## 🧠 Approach
 
-### ✅ Preprocessing
-- Cleaned and parsed both XML and TSV versions of datasets
-- Built structured versions of the data with aligned labels
-- Extracted stylistic features and sentiment features
-- Created balanced train/test sets and cross-validation splits
+### ✅ Data Preparation
+- XML parsing and cleaning (title + body merged)
+- Standardized preprocessing for all models
+- Stylistic feature extraction (uppercase ratio, exclamation count, etc.)
+- Balanced splits, cross-validation folds
 
 ### 🧪 Baseline Models
-Evaluated multiple baseline classifiers:
-- **Naive Bayes**
-- **Logistic Regression**
-- **Random Forest** *(final baseline)*
-- **XGBoost**
+- **Naive Bayes**, **Logistic Regression**, **Random Forest**, **XGBoost**
+- Preprocessing variants: TF-IDF vs. Count, ROS sampling, lemmatization, stopword removal
+- Feature engineering experiments
 
-Tested combinations of:
-- Vectorizers: Count, TF-IDF
-- Preprocessing: Lemmatization, stopword removal
-- Sampling: Random oversampling (ROS)
-- Features: Stylistic + sentiment + lexical
+Final baseline: **Random Forest** with TF-IDF + stylistic features.
 
 ### 🤖 Advanced Model
-- Fine-tuned **XLM-RoBERTa (base)** using Hugging Face Transformers
-- Cross-validated on the by-article dataset
-- Stored predicted labels and probabilities for analysis
-- Compared against traditional models in terms of performance and confidence
+- Fine-tuned **XLM-RoBERTa-base** on the by-article dataset
+- 5-fold weighted ensemble for prediction
+- Early stopping, learning rate tuning, input truncation at 512 tokens
 
 ---
 
-## 📊 Evaluation & Analysis
+## 📊 Evaluation and Analysis
 
-- Metrics used: Accuracy, Balanced Accuracy, Precision, Recall, F1, AUC
-- Visuals: ROC curves, confusion matrices, metric heatmaps, radar charts
-- Confidence-based error analysis (e.g., low-confidence misclassifications)
-- Sentiment and stylistic feature impact studies
-- Discussion on labeling quality, dataset bias, and model robustness
+Metrics used:
+- Accuracy
+- Balanced Accuracy
+- Precision
+- Recall
+- F1 Score
+- AUC (ROC Area Under Curve)
+
+Analysis included:
+- Confidence-based binning
+- Sentiment vs. confidence correlation
+- Error analysis (correct vs misclassified articles)
+- Feature importance for Random Forest
+- Aggregation threshold experiments (Appendix A.4)
 
 ---
 
-## 🔄 Phase 2: Relabeling the Noisy Dataset (By-Publisher)
+## 🔄 Phase 2: Publisher-Level Prediction
 
-After establishing strong models using the clean **by-article** dataset, we extended our project to include the larger, noisily-labeled **by-publisher** dataset.
+After selecting models based on article-level evaluation:
 
-### ⚙️ Procedure
+- **Random Forest** and **XLM-RoBERTa** applied to by-publisher test set
+- Aggregated article predictions into publisher labels (threshold = 50%)
+- Tested aggregation thresholds from 5% to 95% (reported in Appendix A.4)
+- Investigated inconsistencies between model predictions and ground truth labels
+- Conducted sentiment-confidence and error analyses
 
-We used both our best baseline and transformer models to relabel the noisy dataset:
+---
 
-- **Random Forest** (best classical model)
-- **XLM-RoBERTa** (fine-tuned transformer)
+## 🧪 Key Results
 
-Steps:
-- Generated predictions (`.npy`) and probabilities for each article in the by-publisher set
-- Compared predictions to:
-  - The original PAN labels
-  - Each other (model agreement/disagreement)
-- Focused on **confidence-based filtering** to identify possibly mislabeled examples
+| Model                | F1 (Article) | AUC (Article) | F1 (Publisher) | AUC (Publisher) |
+|----------------------|--------------|---------------|----------------|-----------------|
+| Random Forest        | 0.784        | 0.845         | 0.39           | 0.54            |
+| XLM-RoBERTa Ensemble | 0.856        | 0.921         | 0.54           | 0.63            |
 
-### 🧐 Observations
-
-- **XLM-RoBERTa** predicted a higher number of hyperpartisan articles than Random Forest
-- Many **low-confidence PAN labels** were contradicted by both models
-- High agreement between the two models on *non-hyperpartisan* articles
-- Divergent predictions often showed signs of **ambiguous or borderline language**
-- Clear cases of publisher bias in PAN labels were revealed when articles lacked strong partisan cues
-
-### 🔬 Analytical Goals
-
-- Assess **label quality** in the PAN by-publisher dataset using model predictions
-- Explore **model disagreement** to highlight weak spots in distant supervision
-- Identify **potentially cleaner subsets** of the noisy data for future training
-- Reflect on whether models learned **true hyperpartisan cues** or just publisher style
-
-> ✅ Both classical and deep models help expose limitations of the noisy dataset  
-> 🔁 Could be extended into semi-supervised or active learning strategies
-
-
-## 🧪 Results Summary (Example)
-
-| Model                | Setup                     | F1   | AUC  |
-|---------------------|---------------------------|------|------|
-| Naive Bayes          | TF-IDF + Style + ROS + Lemmatization | 0.739 | 0.815 |
-| Random Forest (Final Baseline) | TF-IDF + Style + ROS + Lemmatization | 0.753 | 0.826 |
-| XLM-RoBERTa (Fine-tuned) | Raw text input + Cross-validation | **0.80+** | **~0.85** |
-
-> 📌 Best classical setup used TF-IDF, stylistic features, and oversampling  
-> 📌 Transformer-based model outperformed others but at higher compute cost
+- XLM-RoBERTa outperformed classical baselines
+- Publisher-level prediction was more difficult due to noisy labels
+- Models revealed label inconsistencies in PAN publisher annotations
 
 ---
 
 ## 👥 Team
 
-- **Member 1**: [Darya] - preprocessing, baselines + evoluation/tuning, baseline model label-prediction, report writing
-- **Member 2**: [Mikah] - baselines + evaluation, report writing, presentation
-- **Member 3**: [Kjell] - advanced model + evoluation/tuning, advanced model label-prediction, report writing
+| Member | Contributions |
+|--------|---------------|
+| Darya  | Data processing, baselines, Phase 2 inference, report writing |
+| Mikah  | Baselines, evaluation, visualizations, presentation |
+| Kjell  | Advanced model (XLM-R), Phase 2 inference, report writing |
 
-> Contributions were distributed equally across project phases.
+> ✏️ Collaboration managed via GitHub pull requests.
 
 ---
 
 ## 🗓️ Timeline
 
-| Week         | Tasks |
-|--------------|-------|
-| Mar 21–23    | Team registration, setup, dataset download |
-| Mar 23–Apr 10 | Data cleaning, preprocessing, baseline models, DL setup |
-| Apr 1–10     | Report Part 1, tuning & planning Part 2 |
-| Apr 11–20    | Phase 2, Final model evaluation, analysis, report writing |
-| Apr 21–29    | Report polishing, presentation prep |
-| Apr 30       | 🎉 Submission deadline 🎉 |
-
+| Week          | Focus |
+|---------------|-------|
+| Mar 21–23     | Registration, dataset exploration |
+| Mar 24–Apr 10 | Preprocessing, baselines, advanced model|
+| Apr 10–20     | Advanced model tuning, Phase 2 |
+| Apr 21–29     | Phase 2, Final evaluation, report writing, presentation |
+| Apr 30        | 🎯 Submission |
 ---
 
 ## 📝 Report & Presentation
 
-- **Report**: Written in ACM 2-column LaTeX format (Overleaf)  
+- **Report**: 10-page ACM 2-column LaTeX format (Overleaf)
 - **Includes**: Methodology, evaluation, insights, limitations, GitHub link  
 - **Presentation**: 5–10 mins live in-class presentation
 
----
-
-## 🔁 Reproducibility
-
-To reproduce our results:
-
-```bash
-git clone <repo_url>
-cd <repo>
-pip install -r requirements.txt
-python main.py  # (optional, WIP main pipeline)
